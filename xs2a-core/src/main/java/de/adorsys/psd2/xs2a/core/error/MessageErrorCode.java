@@ -416,7 +416,7 @@ public enum MessageErrorCode {
             return "PAYMENT_FAILED";
         }
     },
-    //
+    // Couldn't get payment by ID
     PAYMENT_FAILED_INCORRECT_ID(400) {
         @Override
         public String getName() {
@@ -489,8 +489,15 @@ public enum MessageErrorCode {
             return SERVICE_INVALID_NAME;
         }
     },
-
-    SERVICE_BLOCKED(403),  // This service is not reachable for the addressed PSU due to a channel independent blocking by the ASPSP
+    // This service is not reachable for the addressed PSU due to a channel independent blocking by the ASPSP
+    SERVICE_BLOCKED(403),
+    // This service is not reachable for the addressed PSU due to incorrect flow
+    SERVICE_BLOCKED_INVALID_FLOW(403) {
+        @Override
+        public String getName() {
+            return "SERVICE_BLOCKED";
+        }
+    },
 
     // The consent-ID cannot be matched by the ASPSP relative to the TPP because of path
     CONSENT_UNKNOWN_403(403) {

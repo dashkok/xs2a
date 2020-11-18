@@ -20,6 +20,7 @@ import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.PisPaymentApi;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.UpdatePaymentAfterSpiServiceEncrypted;
+import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
 import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,17 @@ public class PisPaymentController implements PisPaymentApi {
     @Override
     public ResponseEntity<Void> updatePaymentStatusAfterSpiService(String paymentId, String status) {
         CmsResponse<Boolean> response = updatePaymentStatusAfterSpiService.updatePaymentStatus(paymentId, TransactionStatus.valueOf(status));
+
+        if (response.isSuccessful() && BooleanUtils.isTrue(response.getPayload())) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateInternalPaymentStatusAfterSpiService(String paymentId, String status) {
+        CmsResponse<Boolean> response = updatePaymentStatusAfterSpiService.updateInternalPaymentStatus(paymentId, InternalPaymentStatus.valueOf(status));
 
         if (response.isSuccessful() && BooleanUtils.isTrue(response.getPayload())) {
             return new ResponseEntity<>(HttpStatus.OK);
